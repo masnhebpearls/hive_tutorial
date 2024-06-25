@@ -16,37 +16,16 @@ class DatabaseMethods extends DatabaseHelper {
     await model.delete();
   }
 
-
-
-  // Future<String> getData() async {
-  //   try {
-  //     final box =  getDatabaseInitialized();
-  //     final variable = box.get('name');
-  //     if (variable != null) {
-  //       return variable;
-  //     } else {
-  //       return '';
-  //     }
-  //   } catch (e) {
-  //     return e.toString();
-  //   }
-  // }
-  //
-  // Future<void> deleteData() async {
-  //   try {
-  //     final box = await getDatabaseInitialized();
-  //     box.delete('name');
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
-  //
-  // Future<void> putData() async {
-  //   try {
-  //     final box = await getDatabaseInitialized();
-  //     box.put('name', 'mansh');
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
+  void updateTittle(NotesModel model, String newTittle)  async {
+    if (newTittle.isNotEmpty){
+      model.tittle = newTittle;
+      await model.save();
+    }
+  }
+  void updateNotes(NotesModel model, String newNotes) async {
+    if (newNotes.isNotEmpty){
+      model.notes= newNotes;
+      await model.save();
+    }
+  }
 }

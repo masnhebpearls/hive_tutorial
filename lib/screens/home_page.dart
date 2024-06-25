@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:hive_tutorial/constants/all_global_constants.dart';
 import 'package:hive_tutorial/constants/constants_helper.dart';
 import 'package:hive_tutorial/database/database_helper.dart';
 import 'package:hive_tutorial/database/database_methods.dart';
 import 'package:hive_tutorial/models/notes_model.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_tutorial/widgets/alert_dialog.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,8 +14,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final tittleController = TextEditingController();
-  final notesController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -25,43 +24,11 @@ class _HomePageState extends State<HomePage> {
           showDialog(
               context: context,
               builder: (context) {
-                return AlertDialog(
-                  title: const Text(ConstantsHelper.addNotes),
-                  content:  SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        TextField(
-                            controller: tittleController,
-                            decoration: textFieldBorder),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        TextField(
-                          controller: notesController,
-                          decoration: textFieldBorder,
-                        )
-                      ],
-                    ),
-                  ),
-                  actions: [
-                    TextButton(
-                      child: const Text(ConstantsHelper.cancel),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    TextButton(
-                      child: const Text(ConstantsHelper.add),
-                      onPressed: () {
-                        DatabaseMethods().storeData(tittleController.text,
-                            notesController.text, DateTime.now());
-                        tittleController.clear();
-                        notesController.clear();
-                        Navigator.of(context).pop();
-                      },
-                    )
-                  ],
-                );
+                return  ExtendedAlertDialogue(tittle: "Enter a tittle", notes: "Enter a notes", isEdit: false, model: NotesModel(
+                  id: DateTime.now(),
+                  tittle: '',
+                  notes: ''
+                ),);
               });
         },
         child: const Icon(Icons.add),
@@ -73,11 +40,9 @@ class _HomePageState extends State<HomePage> {
         valueListenable: DatabaseHelper().getDatabaseInitialized().listenable(),
         builder: (context, box, _){
           var data = box.values.toList().cast<NotesModel>();
-
           return ListView.builder(
             itemCount: data.length,
             itemBuilder: (context, index){
-              print("data is ${data[index].tittle}");
               return Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Dismissible(
@@ -85,20 +50,29 @@ class _HomePageState extends State<HomePage> {
                   onDismissed: (direction) {
                     DatabaseMethods().deleteData(data[index]);
                   },
-                  child: Card(
-                    color: Colors.white,
-                    elevation: 10,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
+                  child: InkWell(
+                    onLongPress: () async {
+                      await showDialog(
+                          context: context,
+                          builder: (context) {
+                            return ExtendedAlertDialogue(tittle: data[index].tittle!, notes: data[index].notes!, isEdit: true, model: data[index],);
+                          });
+                    },
+                    child: Card(
+                      color: Colors.white,
+                      elevation: 10,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
 
-                        children: [
-                          Text(data[index].tittle.toString()),
-                          Text(data[index].notes.toString())
+                          children: [
+                            Text(data[index].tittle.toString()),
+                            Text(data[index].notes.toString())
 
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
