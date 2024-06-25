@@ -26,7 +26,7 @@ class _ExtendedAlertDialogueState extends State<ExtendedAlertDialogue> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text(ConstantsHelper.addNotes),
+      title: widget.isEdit  ? const Text(ConstantsHelper.editNotes):const Text(ConstantsHelper.addNotes),
       content:  SingleChildScrollView(
         child: Column(
           children: [
@@ -65,8 +65,11 @@ class _ExtendedAlertDialogueState extends State<ExtendedAlertDialogue> {
             Navigator.of(context).pop();
           }:(){
             DatabaseMethods().updateNotes(widget.model, notesController.text);
+            tittleController.clear();
+            notesController.clear();
+            Navigator.of(context).pop();
           },
-          child: widget.isEdit ? const Text(ConstantsHelper.add): const Text(ConstantsHelper.edit),
+          child: !widget.isEdit ? const Text(ConstantsHelper.add): const Text(ConstantsHelper.edit),
         )
       ],
     );
