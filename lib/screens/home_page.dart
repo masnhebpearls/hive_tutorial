@@ -14,8 +14,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,11 +22,12 @@ class _HomePageState extends State<HomePage> {
           showDialog(
               context: context,
               builder: (context) {
-                return  ExtendedAlertDialogue(tittle: "Enter a tittle", notes: "Enter a notes", isEdit: false, model: NotesModel(
-                  id: DateTime.now(),
-                  tittle: '',
-                  notes: ''
-                ),);
+                return ExtendedAlertDialogue(
+                  tittle: "Enter a tittle",
+                  notes: "Enter a notes",
+                  isEdit: false,
+                  model: NotesModel(id: DateTime.now(), tittle: '', notes: ''),
+                );
               });
         },
         child: const Icon(Icons.add),
@@ -38,11 +37,11 @@ class _HomePageState extends State<HomePage> {
       ),
       body: ValueListenableBuilder<Box<NotesModel>>(
         valueListenable: DatabaseHelper().getDatabaseInitialized().listenable(),
-        builder: (context, box, _){
+        builder: (context, box, _) {
           var data = box.values.toList().cast<NotesModel>();
           return ListView.builder(
             itemCount: data.length,
-            itemBuilder: (context, index){
+            itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Dismissible(
@@ -51,26 +50,30 @@ class _HomePageState extends State<HomePage> {
                     DatabaseMethods().deleteData(data[index]);
                   },
                   child: InkWell(
-                    onLongPress: () async {
+                    onTap: () async {
                       await showDialog(
                           context: context,
                           builder: (context) {
-                            return ExtendedAlertDialogue(tittle: data[index].tittle!, notes: data[index].notes!, isEdit: true, model: data[index],);
+                            return ExtendedAlertDialogue(
+                              tittle: data[index].tittle!,
+                              notes: data[index].notes!,
+                              isEdit: true,
+                              model: data[index],
+                            );
                           });
                     },
                     child: Card(
                       color: Colors.white,
                       elevation: 10,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 15),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
-
                           children: [
                             Text(data[index].tittle.toString()),
                             Text(data[index].notes.toString())
-
                           ],
                         ),
                       ),
@@ -79,10 +82,8 @@ class _HomePageState extends State<HomePage> {
                 ),
               );
             },
-
           );
         },
-
       ),
     );
   }
