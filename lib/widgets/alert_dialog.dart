@@ -7,14 +7,8 @@ import '../database/database_methods.dart';
 
 class ExtendedAlertDialogue extends StatefulWidget {
   const ExtendedAlertDialogue(
-      {super.key,
-      required this.tittle,
-      required this.notes,
-      required this.isEdit,
-      required this.model});
+      {super.key, required this.isEdit, required this.model});
 
-  final String tittle;
-  final String notes;
   final bool isEdit;
   final NotesModel model;
 
@@ -37,13 +31,15 @@ class _ExtendedAlertDialogueState extends State<ExtendedAlertDialogue> {
           children: [
             TextField(
                 controller: tittleController,
-                decoration: textFieldBorder.copyWith(hintText: widget.tittle)),
+                decoration:
+                    textFieldBorder.copyWith(hintText: widget.model.tittle!)),
             const SizedBox(
               height: 10,
             ),
             TextField(
               controller: notesController,
-              decoration: textFieldBorder.copyWith(hintText: widget.notes),
+              decoration:
+                  textFieldBorder.copyWith(hintText: widget.model.notes!),
             )
           ],
         ),
@@ -59,18 +55,18 @@ class _ExtendedAlertDialogueState extends State<ExtendedAlertDialogue> {
           onPressed: !widget.isEdit
               ? () {
                   DatabaseMethods().storeData(tittleController.text,
-                      notesController.text, DateTime.now());
+                      notesController.text, widget.model.id!);
                   tittleController.clear();
                   notesController.clear();
                   Navigator.of(context).pop();
                 }
               : () {
-                  if (tittleController.text != widget.tittle &&
+                  if (tittleController.text != widget.model.tittle &&
                       tittleController.text.isNotEmpty) {
                     DatabaseMethods()
                         .updateTittle(widget.model, tittleController.text);
                   }
-                  if (notesController.text != widget.notes &&
+                  if (notesController.text != widget.model.notes &&
                       notesController.text.isNotEmpty) {
                     DatabaseMethods()
                         .updateNotes(widget.model, notesController.text);

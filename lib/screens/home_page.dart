@@ -23,10 +23,8 @@ class _HomePageState extends State<HomePage> {
               context: context,
               builder: (context) {
                 return ExtendedAlertDialogue(
-                  tittle: "Enter a tittle",
-                  notes: "Enter a notes",
                   isEdit: false,
-                  model: NotesModel(id: DateTime.now(), tittle: '', notes: ''),
+                  model: NotesModel(id: DateTime.now(), tittle: "Enter a tittle", notes: "Enter a notes"),
                 );
               });
         },

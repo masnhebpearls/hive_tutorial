@@ -21,8 +21,6 @@ class _NotesCardState extends State<NotesCard> {
         context: context,
         builder: (context) {
           return ExtendedAlertDialogue(
-            tittle: widget.data.tittle!,
-            notes: widget.data.notes!,
             isEdit: true,
             model: widget.data,
           );
