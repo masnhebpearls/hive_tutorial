@@ -5,11 +5,29 @@ import '../constants/all_global_constants.dart';
 import '../database/database_methods.dart';
 import 'alert_dialog.dart';
 
-class NotesCard extends StatelessWidget {
+class NotesCard extends StatefulWidget {
   const NotesCard({super.key, required this.data});
 
   final NotesModel data;
 
+  @override
+  State<NotesCard> createState() => _NotesCardState();
+}
+
+class _NotesCardState extends State<NotesCard> {
+
+  void _showDialogue() async {
+    await showDialog(
+        context: context,
+        builder: (context) {
+          return ExtendedAlertDialogue(
+            tittle: widget.data.tittle!,
+            notes: widget.data.notes!,
+            isEdit: true,
+            model: widget.data,
+          );
+        });
+  }
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -18,7 +36,7 @@ class NotesCard extends StatelessWidget {
         key: UniqueKey(),
         onDismissed: (direction) {
           try {
-            DatabaseMethods().deleteData(data);
+            DatabaseMethods().deleteData(widget.data);
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 action: SnackBarAction(
@@ -27,7 +45,7 @@ class NotesCard extends StatelessWidget {
                   label: "Undo",
                   onPressed: () {
                     DatabaseMethods()
-                        .storeData(data.tittle!, data.notes!, data.id!);
+                        .storeData(widget.data.tittle!, widget.data.notes!, widget.data.id!);
                   },
                 ),
                 backgroundColor: Colors.white,
@@ -50,18 +68,7 @@ class NotesCard extends StatelessWidget {
           }
         },
         child: InkWell(
-          onTap: () async {
-            await showDialog(
-                context: context,
-                builder: (context) {
-                  return ExtendedAlertDialogue(
-                    tittle: data.tittle!,
-                    notes: data.notes!,
-                    isEdit: true,
-                    model: data,
-                  );
-                });
-          },
+          onTap: _showDialogue,
           child: Card(
             color: Colors.tealAccent,
             elevation: 10,
@@ -74,29 +81,18 @@ class NotesCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        data.tittle.toString(),
+                        widget.data.tittle.toString(),
                         style: titleTextStyle,
                       ),
                       Text(
-                        data.notes.toString(),
+                        widget.data.notes.toString(),
                         style: noteTextStyle,
                       )
                     ],
                   ),
                   const Spacer(),
                   IconButton(
-                      onPressed: () async {
-                        await showDialog(
-                            context: context,
-                            builder: (context) {
-                              return ExtendedAlertDialogue(
-                                tittle: data.tittle!,
-                                notes: data.notes!,
-                                isEdit: true,
-                                model: data,
-                              );
-                            });
-                      },
+                      onPressed: _showDialogue,
                       icon: const Icon(Icons.edit))
                 ],
               ),
