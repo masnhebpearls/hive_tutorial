@@ -23,10 +23,7 @@ class ExtendedAlertDialogue extends StatefulWidget {
 }
 
 class _ExtendedAlertDialogueState extends State<ExtendedAlertDialogue> {
-  NotesModel? model;
-
   final tittleController = TextEditingController();
-
   final notesController = TextEditingController();
 
   @override
@@ -68,8 +65,15 @@ class _ExtendedAlertDialogueState extends State<ExtendedAlertDialogue> {
                   Navigator.of(context).pop();
                 }
               : () {
-                  DatabaseMethods()
-                      .updateNotes(widget.model, notesController.text);
+                  if (tittleController.text != widget.tittle) {
+                    DatabaseMethods()
+                        .updateTittle(widget.model, tittleController.text);
+                  }
+                  if (notesController.text != widget.notes) {
+                    DatabaseMethods()
+                        .updateNotes(widget.model, notesController.text);
+                  }
+
                   tittleController.clear();
                   notesController.clear();
                   Navigator.of(context).pop();
