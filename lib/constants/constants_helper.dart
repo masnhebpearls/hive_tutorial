@@ -5,7 +5,7 @@ class ConstantsHelper {
   static const editNotes = "Edit Notes";
   static const cancel = 'Cancel';
   static const add = 'Add';
-  static const edit = 'edit';
+  static const edit = 'Edit';
 
   static const appBarTittle = "Hive Test";
 

@@ -65,15 +65,16 @@ class _ExtendedAlertDialogueState extends State<ExtendedAlertDialogue> {
                   Navigator.of(context).pop();
                 }
               : () {
-                  if (tittleController.text != widget.tittle) {
+                  if (tittleController.text != widget.tittle &&
+                      tittleController.text.isNotEmpty) {
                     DatabaseMethods()
                         .updateTittle(widget.model, tittleController.text);
                   }
-                  if (notesController.text != widget.notes) {
+                  if (notesController.text != widget.notes &&
+                      notesController.text.isNotEmpty) {
                     DatabaseMethods()
                         .updateNotes(widget.model, notesController.text);
                   }
-
                   tittleController.clear();
                   notesController.clear();
                   Navigator.of(context).pop();

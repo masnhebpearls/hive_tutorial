@@ -22,7 +22,7 @@ class NotesCard extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 action: SnackBarAction(
-                  backgroundColor: Colors.amber,
+                  backgroundColor: Colors.tealAccent,
                   textColor: Colors.white,
                   label: "Undo",
                   onPressed: () {
@@ -63,7 +63,7 @@ class NotesCard extends StatelessWidget {
                 });
           },
           child: Card(
-            color: Colors.white,
+            color: Colors.tealAccent,
             elevation: 10,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
